@@ -1,0 +1,42 @@
+{
+  "template": {
+    "tag": "cells-template-paper-drawer-panel",
+    "properties": {
+      "disableEdgeSwipe": true,
+      "headerFixed": true
+    }
+  },
+  "components": [
+    {
+      "zone": "app__main",
+      "type": "UI",
+      "familyPath": "../elements/my-home",
+      "tag": "my-home",
+      "properties": {
+        "cellsConnections": {
+          "in": {
+            "dm-gif-channel": {
+              "bind": "propertyGifs"
+            }
+          },
+          "out": {}
+        }
+      }
+    },
+    {
+      "zone": "app__main",
+      "type": "DM",
+      "familyPath": "../elements/example-data-manager",
+      "tag": "example-data-manager",
+      "properties": {
+        "cellsConnections": {
+          "out": {
+           "dm-gif-channel": {
+              "bind": "gifs-changed"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

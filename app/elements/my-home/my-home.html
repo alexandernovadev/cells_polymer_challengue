@@ -1,0 +1,98 @@
+<dom-module id="my-home">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        height: 280px;
+        margin: 32px;
+        gap: 12px;
+      }
+      .card img {
+        max-height: 200px;
+      }
+      .card button {
+        text-transform: uppercase;
+        color: rgb(48, 48, 219);
+        border: 1px solid gray;
+        border-radius: 4px;
+        padding: 12px;
+        background: transparent;
+      }
+    </style>
+
+    [[propertyGifs]]
+
+    <template is="dom-repeat" items="[[dataGifs]]">
+      <div class="card">
+        [[item.title]]
+        <img src="[[item.url]]" alt="" />
+        <button>Agregar al carro</button>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    const APIKEY = "8HtcX4Qrusz1ZgYwdul8hnkxS73MqWc8";
+    const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${APIKEY}`;
+
+    class MyHome extends Polymer.Element {
+      static get is() {
+        return "my-home";
+      }
+      constructor() {
+        super();
+        this.getData();
+      }
+
+      // This methos should be a DM pero llega promise :(
+      async getData() {
+        const answer = await fetch(URL);
+        const { data } = await answer.json();
+        const gifs = data.map(({ id, title, images }) => ({
+          id,
+          title,
+          url: images.original.url,
+        }));
+        // console.log(gifs);
+        this.dataGifs = gifs;
+        return this.dataGifs;
+      }
+
+      // Todo This no work . the channel not save the data ??
+      _authorizationChanged() {
+        if (this.propertyGifs) {
+          /// WTF ?????
+          this.propertyGifs.then((data) => {
+            // Here show in console then djslkfnskjldnfkjsd
+            console.log("data :", data);
+            // this.dataGifs = data
+          });
+          console.log("sera asi ???");
+        }
+      }
+      // Declare properties for the element's public API
+      static get properties() {
+        return {
+          dataGifs: {
+            type: Array,
+            observer: "_authorizationChanged",
+          },
+          propertyGifs: {
+            type: Array,
+            notify: true,
+            value:[]
+          },
+        };
+      }
+    }
+
+    customElements.define(MyHome.is, MyHome);
+  </script>
+</dom-module>
