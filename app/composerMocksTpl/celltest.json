@@ -1,0 +1,59 @@
+{
+  "template": {
+    "tag": "cells-template-paper-drawer-panel",
+    "properties": {
+      "disableEdgeSwipe": true,
+      "headerFixed": true
+    }
+  },
+  "components": [
+    {
+      "zone": "app__main",
+      "type": "UI",
+      "familyPath": "../elements/my-home",
+      "tag": "cells-product-item-list",
+      "properties": {
+        "cellsConnections": {
+          "in": {
+            "channel_loading":{
+              "bind":"loading"
+            },
+            "channel_error":{
+              "bind":"error"
+            },
+            "channel_transactions":{
+              "bind":"transactions"
+            }
+          },
+          "out": {}
+        }
+      }
+    },
+    {
+      "zone": "app__main",
+      "type": "DM",
+      "familyPath": "here_the_route_of_dm",
+      "tag": "cells-transaction-list-dm",
+      "properties": {
+        "cellsConnections": {
+          "in":{
+            "__bridge-page-transaction":{
+              "bind":"getTransactions"
+            }
+          },
+          "out": {
+            "channel_loading": {
+              "bind": "loading-changed"
+            },
+            "channel_error": {
+              "bind": "error-changed"
+            },
+            "channel_transaction": {
+              "bind": "transaction-changed"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
