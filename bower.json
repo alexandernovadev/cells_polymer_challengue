@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "dependencies": {
     "cells-template-paper-drawer-panel": "^11.0.0",
-    "web-component-tester":"6.6.0-pre.5"
+    "web-component-tester": "6.6.0-pre.5",
+    "cells-generic-dp": "^16.0.0",
+    "cells-image-card": "^12.5.1",
+    "cells-st-button": "^13.8.1",
+    "coronita-icons": "^14.11.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"

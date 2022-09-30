@@ -1,3 +1,8 @@
+<link
+  rel="import"
+  href="../../../components/cells-generic-dp/cells-generic-dp.html"
+/>
+
 <dom-module id="example-data-manager">
   <template>
     <style>
@@ -5,6 +10,16 @@
         display: block;
       }
     </style>
+
+    <cells-generic-dp
+      id="myDataProvider"
+      host="https://api.giphy.com"
+      path="v1/gifs/search"
+      params='{"api_key":"8HtcX4Qrusz1ZgYwdul8hnkxS73MqWc8","q":"pug","limit":"7"}'
+      method="GET"
+      on-request-success="getData"
+      auto
+    ></cells-generic-dp>
   </template>
   <script>
     class ExampleDataManager extends Polymer.Element {
@@ -12,43 +27,23 @@
         return "example-data-manager";
       }
 
-      // Declare properties for the element's public API
       static get properties() {
         return {
-          users: {
-            type: Array,
-            notify: true,
-            value: function () {
-              return {
-                userId: 1,
-                id: 1,
-                title: "Payload enviado por el DM",
-              };
-            },
-          },
           gifs: {
             type: Array,
             notify: true,
-            value: function () {
-              const APIKEY = "8HtcX4Qrusz1ZgYwdul8hnkxS73MqWc8";
-              const URLAPIU = `https://api.giphy.com/v1/gifs/trending?api_key=${APIKEY}`;
-
-              // Se supone que esto debe mostrarse bien pero
-              // al momento de mostrar , genera un promise ?????
-              try {
-                const data = async () => {
-                  const response = await fetch(URLAPIU);
-                  const gifs = await response.json();
-                  return gifs.data;
-                };
-
-                return data();
-              } catch (error) {
-                return [];
-              }
-            },
           },
         };
+      }
+
+      getData(data) {
+        this.dispatchEvent(
+          new CustomEvent("suces-data", {
+            detail: {
+              data: data.detail.data,
+            },
+          })
+        );
       }
     }
 

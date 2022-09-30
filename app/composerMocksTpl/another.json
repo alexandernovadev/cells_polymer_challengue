@@ -10,26 +10,28 @@
     {
       "zone": "app__main",
       "type": "UI",
-      "familyPath": "../elements/my-home",
-      "tag": "my-home",
+      "familyPath": "../elements/another-page",
+      "tag": "another-page",
       "properties": {
         "cellsConnections": {
           "in": {
-            "dm-gif-channel": {
-              "bind": "gifs"
+            "dm-example-channel": {
+              "bind": "propertyUser"
+            },
+            "pug-detail-channel":{
+              "bind":"dataGif"
             }
+
           },
           "out": {
-            "pug-detail-channel":{
-              "bind":"pug-details",
-              "link":{
-                "page":"another",
-                "params":{
-                  "titlePug":"dataGif"
-                }
+            "foobar-channel": {
+              "bind": "home-event",
+              "link": {
+                "page": "login"
               }
             }
           }
+
         }
       }
     },
@@ -41,8 +43,8 @@
       "properties": {
         "cellsConnections": {
           "out": {
-            "dm-gif-channel": {
-              "bind": "suces-data"
+            "dm-example-channel": {
+              "bind": "users-changed"
             }
           }
         }

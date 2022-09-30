@@ -1,3 +1,17 @@
+<link
+  rel="import"
+  href="../../../components/cells-image-card/cells-image-card.html"
+/>
+<link
+  rel="import"
+  href="../../../components/cells-st-button/cells-st-button.html"
+/>
+
+<link
+  rel="import"
+  href="../../../components/coronita-icons/coronita-icons.html"
+/>
+
 <dom-module id="my-home">
   <template>
     <style>
@@ -5,89 +19,92 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        flex-direction: row;
       }
-      .card {
+      .cardContainer {
+        /* background: red; */
+        width: 300px;
+        border: 1px solid gray;
+        padding-bottom: 12px;
+        border-radius: 4px;
+        margin: 12px;
+        display: flex;
         display: flex;
         flex-direction: column;
-        width: 200px;
-        height: 280px;
-        margin: 32px;
-        gap: 12px;
+        justify-content: center;
+        align-items: center;
       }
-      .card img {
-        max-height: 200px;
+
+      .column img {
+        width: 100% !important;
       }
-      .card button {
-        text-transform: uppercase;
-        color: rgb(48, 48, 219);
-        border: 1px solid gray;
-        border-radius: 4px;
-        padding: 12px;
-        background: transparent;
+      cells-st-button {
+        display: flex;
+        flex-direction: row !important;
+        justify-content: center;
+        align-items: center;
       }
     </style>
 
-    [[propertyGifs]]
+    <template is="dom-if" if="[[!gifs]]"> Cargando </template>
+    <template is="dom-if" if="[[gifs]]">
+      <template is="dom-repeat" items="[[gifs.data]]">
+        <div class="cardContainer">
+          <cells-image-card
+            class="column"
+            heading="[[item.title]]"
+            image-url="[[item.images.original.url]]"
+            alt="Your image alt"
+          >
+          </cells-image-card>
+          <cells-st-button class="secondary-light-background">
+            <button on-click="detailPug" class="">
+              <span class="btn-contents">
 
-    <template is="dom-repeat" items="[[dataGifs]]">
-      <div class="card">
-        [[item.title]]
-        <img src="[[item.url]]" alt="" />
-        <button>Agregar al carro</button>
-      </div>
+                <iron-icon
+                  class="btn-icon icon-size-16"
+                  icon="coronita:shopping"
+                ></iron-icon>
+                <span class="btn-text">Agregar al carrito</span>
+
+              </span>
+            </button>
+          </cells-st-button>
+        </div>
+      </template>
     </template>
   </template>
 
   <script>
-    const APIKEY = "8HtcX4Qrusz1ZgYwdul8hnkxS73MqWc8";
-    const URL = `https://api.giphy.com/v1/gifs/trending?api_key=${APIKEY}`;
-
     class MyHome extends Polymer.Element {
       static get is() {
         return "my-home";
       }
       constructor() {
         super();
-        this.getData();
       }
 
-      // This methos should be a DM pero llega promise :(
-      async getData() {
-        const answer = await fetch(URL);
-        const { data } = await answer.json();
-        const gifs = data.map(({ id, title, images }) => ({
-          id,
-          title,
-          url: images.original.url,
-        }));
-        // console.log(gifs);
-        this.dataGifs = gifs;
-        return this.dataGifs;
+      detailPug(e) {
+        const { id, title, url } = e.model.__data.item;
+
+        this.dispatchEvent(
+          new CustomEvent("pug-details", {
+            bubbles: true,
+            composed: true,
+            detail: {
+              titlePug: title,
+              idPug: id,
+              urlPug: url,
+            },
+          })
+        );
+        console.log("Sirve esto ", { id, title, url });
       }
 
-      // Todo This no work . the channel not save the data ??
-      _authorizationChanged() {
-        if (this.propertyGifs) {
-          /// WTF ?????
-          this.propertyGifs.then((data) => {
-            // Here show in console then djslkfnskjldnfkjsd
-            console.log("data :", data);
-            // this.dataGifs = data
-          });
-          console.log("sera asi ???");
-        }
-      }
-      // Declare properties for the element's public API
       static get properties() {
         return {
-          dataGifs: {
+          gifs: {
             type: Array,
-            observer: "_authorizationChanged",
-          },
-          propertyGifs: {
-            type: Array,
-            notify: true,
-            value:[]
           },
         };
       }
